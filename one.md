@@ -275,6 +275,167 @@ let add x y = x + y
 --
 ### Sudoku Solver
 [Full source code](https://github.com/lawliet89/fsudoku/blob/master/fsudoku/Program.fs)
+
+```
+$./fsudoku.exe fsudoku/difficult.txt 
+3 _ _ 7 _ _ _ _ _
+_ _ 8 _ 4 _ _ _ 6
+_ 2 _ _ _ 5 _ _ _
+_ _ 4 _ 1 _ 6 _ _
+_ _ _ 5 _ _ _ 8 _
+_ 7 _ _ _ _ _ 1 _
+_ 8 _ _ _ 3 9 _ _
+_ _ 9 _ 8 _ _ 6 _
+2 _ _ _ _ _ 4 _ 8
+Proposed Solution:
+3 4 1 7 6 8 2 5 9
+5 9 8 2 4 1 3 7 6
+6 2 7 9 3 5 8 4 1
+8 5 4 3 1 7 6 9 2
+1 6 2 5 9 4 7 8 3
+9 7 3 8 2 6 5 1 4
+4 8 6 1 5 3 9 2 7
+7 3 9 4 8 2 1 6 5
+2 1 5 6 7 9 4 3 8
+Validity: True
+
+```
+
+--
+### Sudoku Solver - Boilerplate
+```fsharp
+    // Types
+    type Value = Option<int>
+    type Grid = Value[,]
+
+    let public ReadGrid filename : Grid = 
+       let intToOpt x = match x with
+                            | 0 -> None
+                            | x -> Some x
+       // Is there some better way to do this?
+       let irregular = System.IO.File.ReadLines(filename) 
+                           |> Seq.map (fun line -> 
+                                        line.Split ' '
+                                        |> Seq.map System.Int32.Parse 
+                                        |> Seq.map intToOpt
+                                        |> Seq.toArray)
+                           |> Seq.toArray
+       Array2D.init 9 9 (fun x y -> irregular.[x].[y])
+
+    let public GridToString (grid : Grid) = 
+        let intOptionToString = function
+                                | None -> "_"
+                                | Some x -> string x
+        let printRow row = 
+            Array.map intOptionToString row 
+                |> String.concat " " 
+            
+        [for row in 0..8 do yield grid.[row, *]]
+            |> List.map printRow
+            |> String.concat "\n"
+
+```
+--
+### Sudoku Solver - Helpers
+```fsharp
+    let public ValidList (list : Value list) = 
+        let rec withinRange = function
+            | [] -> true
+            | head :: tail -> let headWithinRange = match head with
+                                                    | None -> true
+                                                    | Some x ->  x > 0 && x < 10
+                              headWithinRange && withinRange(tail)
+        let someList = list |> List.choose id
+        (list.Length = 9) && (withinRange list) && (someList.Length = (List.distinct someList |> List.length))
+    
+    let Row row (grid : Grid) = grid.[row, *]
+    let Column column  (grid : Grid) = grid.[*, column]
+    let Box x y (grid : Grid) = 
+        let startX = x / 3 * 3
+        let startY = y /3 * 3
+        grid.[startY..(startY+2), startX..(startX+2)] |> Seq.cast |> Seq.toArray
+
+    let ValidCoordinate x y (grid : Grid) = (grid |> Row y |> Array.toList |> ValidList)
+                                                && (grid |> Column x |> Array.toList |> ValidList)
+                                                && (grid |> Box x y |> Array.toList |> ValidList)
+
+    let PossibleValues x y (grid : Grid) = 
+        let unusedValues list = (Set [1..9]) - (Set list)
+        let unusedRow = Row y grid |> Array.choose id |> unusedValues
+        let unusedColumn = Column x grid |> Array.choose id |> unusedValues
+        let unusedBox = Box x y grid |> Array.choose id |> unusedValues
+        unusedRow |> Set.intersect unusedColumn |> Set.intersect unusedBox    
+
+    let VerifyGrid (grid : Grid) = 
+        let valid = seq { for x in 0..8 do for y in 0..8 do yield (x, y) }
+                        |> Seq.fold (fun acc (x, y) -> acc && (ValidCoordinate x y grid)) true
+        let anyNone = Seq.cast<Value> grid |> Seq.exists (fun x -> match x with | None -> true | Some(_) -> false )
+        valid && (not anyNone)
+```
+--
+### Sudoku Solver Backtracing Algorithm
+![Illustration](https://upload.wikimedia.org/wikipedia/commons/8/8c/Sudoku_solved_by_bactracking.gif)
+```
+ Initialize 2D array with 81 empty grids (nx = 9, ny = 9)
+ Fill in some empty grid with the known values
+ Make an original copy of the array
+ Start from top left grid (nx = 0, ny = 0), check if grid is empty
+ if (grid is empty) {
+   assign the empty grid with values (i)
+   if (no numbers exists in same rows & same columns same as (i) & 3x3 square (i) is currently in)
+     fill in the number
+   if (numbers exists in same rows & same columns same as (i) & 3x3 square (i) is currently in)
+     discard (i) and repick other values (i++)
+ }
+ else {
+   while (nx < 9) {
+     Proceed to next row grid(nx++, ny)
+     if (nx equals 9) {
+       reset nx = 1
+       proceed to next column grid(nx,ny++)
+       if (ny equals 9) {
+         print solution
+       }
+     }
+   }
+ }
+```
+--
+### Sudoku Solver -- Solving Logic
+```fsharp
+    let solve (grid : Grid) =
+        let solution : Grid = Array2D.copy grid
+        let isValid x y = ValidCoordinate x y solution
+
+        let rec findSolution x y = 
+            match (x, y) with
+                | (x, y) when x > 8 || y > 8 -> true
+                | (_, _) -> let nextX, nextY = match (x, y) with
+                                                | (8, y) -> 0, (y + 1)
+                                                | (_, _) -> (x + 1), y
+                            let currentSolution = solution.[y, x]
+                            match currentSolution with
+                                | Some(value) -> findSolution nextX nextY
+                                | None -> let possibleValues = PossibleValues x y solution
+                                          let rec explorePossibilities = function 
+                                                | [] -> false
+                                                | head :: tail -> solution.[y, x] <- Some head
+                                                                  let valid = isValid x y
+                                                                  let continuation = match valid with
+                                                                                        | true -> findSolution nextX nextY
+                                                                                        | false -> false
+                                                                  match continuation with
+                                                                        | true -> true
+                                                                        | false -> solution.[y, x] <- None
+                                                                                   explorePossibilities tail
+                                          explorePossibilities (possibleValues |> Set.toList)                                
+                            
+                                      
+        findSolution 0 0 |> ignore
+        solution
+
+```
+
 --
 ### Next Episode
  - Function composition
