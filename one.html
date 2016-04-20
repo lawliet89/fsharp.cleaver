@@ -1,0 +1,834 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>F♯ Simple Simple</title>
+  <style type="text/css">
+    body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #222;
+  font-size: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  background-color: #f7f7f7;
+}
+
+.slide-content {
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  margin: 80px auto 0 auto;
+  padding: 30px;
+
+  font-weight: 200;
+  font-size: 200%;
+  line-height: 1.375;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.arrow {
+  width: 0; height: 0;
+  border: 30px solid #333;
+  float: left;
+  margin-right: 30px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.prev {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+
+  border-left-width: 0;
+  border-right-width: 50px;
+}
+
+.next {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+
+  border-left-width: 50px;
+  border-right-width: 0;
+}
+
+.prev:hover {
+  border-right-color: #888;
+  cursor: pointer;
+}
+
+.next:hover {
+  border-left-color: #888;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 300%;
+  line-height: 1.2;
+  text-align: center;
+  margin: 170px 0 0;
+}
+
+h2 {
+  font-size: 100%;
+  line-height: 1.2;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: 200;
+}
+
+h3 {
+  font-size: 140%;
+  line-height: 1.2;
+  border-bottom: 1px solid #aaa;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+ul {
+  padding: 20px 0 0 60px;
+  font-weight: 200;
+  line-height: 1.375;
+}
+
+.author h1 {
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.author h3 {
+  font-weight: 100;
+  text-align: center;
+  font-size: 95%;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: #44a4dd;
+}
+
+a:hover {
+  color: #66b5ff;
+}
+
+pre {
+  font-size: 60%;
+  line-height: 1.3;
+}
+
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 3px;
+  background-color: #b4b4b4;
+
+  -webkit-transition: width 0.05s ease-out;
+  -moz-transition: width 0.05s ease-out;
+  -o-transition: width 0.05s ease-out;
+  transition: width 0.05s ease-out;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 850px) {
+
+  body {
+    font-size: 70%;
+  }
+
+  .slide-content {
+    width: auto;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  h1 {
+    margin-top: 120px;
+  }
+
+  .prev, .prev:hover {
+    border-right-color: rgba(135, 135, 135, 0.5);
+  }
+
+  .next, .next:hover {
+    border-left-color: rgba(135, 135, 135, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 50%;
+    overflow: hidden;
+  }
+
+  .slide-content {
+    padding: 10px;
+    margin-top: 10px;
+    height: 340px;
+  }
+
+  h1 {
+    margin-top: 50px;
+  }
+
+  ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter;
+  }
+
+  .hidden {
+    display: inline;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  body {
+    margin: 0 auto !important;
+    border: 0;
+    padding: 0;
+    float: none !important;
+    overflow: visible;
+    background: none !important;
+    font-size: 52%;
+  }
+
+  .progress, .controls {
+    display: none;
+  }
+
+  .slide {
+    position: static;
+  }
+
+  .slide-content {
+    border: 1px solid #222;
+    margin-top: 0;
+    margin-bottom: 40px;
+    height: 3.5in;
+    overflow: visible;
+  }
+
+  .slide:nth-child(even) {
+    /* 2 slides per page */
+    page-break-before: always;
+  }
+}
+
+/*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #333;
+  background: #f8f8f8;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #998;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #333;
+  font-weight: bold;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #008080;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: #d14;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #900;
+  font-weight: bold;
+}
+
+.hljs-subst {
+  font-weight: normal;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #009926;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #990073;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #0086b3;
+}
+
+.hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+
+.hljs-deletion {
+  background: #fdd;
+}
+
+.hljs-addition {
+  background: #dfd;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+pre {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    overflow: auto;
+    font-size: 90%;
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+code, pre {
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 140%;
+}
+
+.long-code {
+    font-size: 80%;
+}
+
+.slide-content {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+h1, h2 {
+    margin: auto;
+}
+
+iframe {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 90%;
+    width: 90%;
+    outline: 0;
+}
+
+  </style>
+    <script async src="http://localhost:35729/livereload.js"></script>
+</head>
+<body>
+    <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="slide" id="slide-1">
+    <section class="slide-content"><h1 id="f-simple-simple">F♯ Simple Simple</h1>
+<h2 id="a-simple-first-look-at-f-">A simple first look at F♯</h2>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-2">
+    <section class="slide-content"><h3 id="why-f-and-not-haskell-">Why F♯ and not Haskell?</h3>
+<ul>
+<li>Wanted something that has a robust ecosystem of libraries</li>
+<li>With existing tools like testing, linting, build etc.</li>
+</ul>
+<h3 id="why-f-and-not-scala-clojure-">Why F♯ and not Scala/Clojure?</h3>
+<ul>
+<li>More familiar with .NET ecosystem</li>
+<li>Also... <a href="https://github.com/dotnet/core">.NET CORE</a>!</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-3">
+    <section class="slide-content"><h3 id="what-is-f-">What is F♯?</h3>
+<ul>
+<li>F♯ is a language in the .NET family</li>
+<li>Compiles to run code on the 
+<a href="https://github.com/dotnet/coreclr">Common Language Runtime</a> with support of F♯ 
+specific libraries</li>
+<li>Strongly and statically typed</li>
+<li>Type system is common to CLR -- single-inheritance, multiple interface and 
+generics</li>
+<li>Compiler tries to infer as much as possible</li>
+<li>Multi paradigm, but focused on functional </li>
+<li>Encourages the use of immutable data structures. Makes it more difficult
+to mutate data</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-4">
+    <section class="slide-content"><h3 id="hello-world">Hello World</h3>
+<pre><code class="lang-fsharp">&gt; System.Console.WriteLine <span class="hljs-string">"Hello world"</span>;;
+Hello world
+<span class="hljs-keyword">val</span> it : unit = ()</code></pre>
+<h3 id="values">Values</h3>
+<ul>
+<li>Immutable values are bound (not assigned) with `let</li>
+</ul>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> x = <span class="hljs-number">5</span>
+<span class="hljs-keyword">let</span> y = <span class="hljs-number">10</span>
+<span class="hljs-keyword">let</span> z = x + y;;
+
+<span class="hljs-keyword">val</span> x : int = <span class="hljs-number">5</span>
+<span class="hljs-keyword">val</span> y : int = <span class="hljs-number">10</span>
+<span class="hljs-keyword">val</span> z : int = <span class="hljs-number">15</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-5">
+    <section class="slide-content"><h3 id="functions">Functions</h3>
+<ul>
+<li>Are also values</li>
+<li>Final statement executed is the return value</li>
+</ul>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> add x y = x + y  
+<span class="hljs-keyword">let</span> sum = add x <span class="hljs-number">6</span>;;
+
+<span class="hljs-keyword">val</span> add : x:int -&gt; y:int -&gt; int
+<span class="hljs-keyword">val</span> sum : int = <span class="hljs-number">11</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-6">
+    <section class="slide-content"><h3 id="some-more-complicated-calls">Some more complicated calls</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> add x y = x + y
+
+ <span class="hljs-keyword">let</span> sub x y = x - y
+
+ <span class="hljs-keyword">let</span> printThreeNumbers num1 num2 num3 =
+     printfn <span class="hljs-string">"num1: %i"</span> num1
+     printfn <span class="hljs-string">"num2: %i"</span> num2
+     printfn <span class="hljs-string">"num3: %i"</span> num3
+
+printThreeNumbers <span class="hljs-number">5</span> (add <span class="hljs-number">10</span> <span class="hljs-number">7</span>) (sub <span class="hljs-number">20</span> <span class="hljs-number">8</span>);;
+
+num1: <span class="hljs-number">5</span>
+num2: <span class="hljs-number">17</span>
+num3: <span class="hljs-number">12</span>
+
+<span class="hljs-keyword">val</span> add : x:int -&gt; y:int -&gt; int
+<span class="hljs-keyword">val</span> sub : x:int -&gt; y:int -&gt; int
+<span class="hljs-keyword">val</span> printThreeNumbers : num1:int -&gt; num2:int -&gt; num3:int -&gt; unit
+<span class="hljs-keyword">val</span> it : unit = ()</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-7">
+    <section class="slide-content"><h3 id="recursion">Recursion</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> fib = <span class="hljs-keyword">function</span>
+     | <span class="hljs-number">0</span> -&gt; <span class="hljs-number">0</span>
+     | <span class="hljs-number">1</span> -&gt; <span class="hljs-number">1</span>
+     | n -&gt; fib (n - <span class="hljs-number">1</span>) + fib (n - <span class="hljs-number">2</span>)  
+fib <span class="hljs-number">10</span>;;
+
+<span class="hljs-keyword">val</span> fib : _arg1:int -&gt; int
+<span class="hljs-keyword">val</span> it : int = <span class="hljs-number">55</span></code></pre>
+<h3 id="stack-overflow-and-really-slow-">Stack overflow (and really slow)</h3>
+<pre><code class="lang-fsharp">fib <span class="hljs-number">100</span>;;</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-8">
+    <section class="slide-content"><h3 id="another-example">Another example</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> factorial = <span class="hljs-keyword">function</span>
+    | n <span class="hljs-keyword">when</span> n = <span class="hljs-number">0</span>I -&gt; <span class="hljs-number">1</span>I
+    | n -&gt; n * factorial (n - <span class="hljs-number">1</span>I)
+
+factorial <span class="hljs-number">100</span>I
+factorial <span class="hljs-number">100000</span>I</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-9">
+    <section class="slide-content"><h3 id="tail-recursion">Tail Recursion</h3>
+<pre><code class="lang-fsharp"><span class="hljs-comment">// Tail recursive Fibonacci</span>
+<span class="hljs-comment">// BigInt -&gt; BigInt</span>
+<span class="hljs-keyword">let</span> bigFib n =
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> loop previous previousPrevious = <span class="hljs-keyword">function</span>
+        | n <span class="hljs-keyword">when</span> n = <span class="hljs-number">0</span>I -&gt; previousPrevious
+        | n -&gt; loop (previous + previousPrevious) previous (n - <span class="hljs-number">1</span>I)
+    loop <span class="hljs-number">1</span>I <span class="hljs-number">0</span>I n
+
+<span class="hljs-keyword">val</span> bigFib : n:System.Numerics.BigInteger -&gt; System.Numerics.BigInteger</code></pre>
+<h3 id="some-demonstrations">Some demonstrations</h3>
+<pre><code class="lang-fsharp">[<span class="hljs-number">0</span>I .. <span class="hljs-number">100</span>I] |&gt; List.iter (<span class="hljs-keyword">fun</span> x -&gt; printfn <span class="hljs-string">"fib(%O) = %O"</span> x (bigFib x))
+
+[<span class="hljs-number">0</span>I .. <span class="hljs-number">100</span>I .. <span class="hljs-number">10000</span>I] |&gt; List.iter (<span class="hljs-keyword">fun</span> x -&gt; printfn <span class="hljs-string">"fib(%O) = %O"</span> x (bigFib x))</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-10">
+    <section class="slide-content"><h3 id="another-one">Another one</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> factorial n = 
+    <span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> loop acc = <span class="hljs-keyword">function</span>
+        | n <span class="hljs-keyword">when</span> n = <span class="hljs-number">0</span>I -&gt; acc
+        | n -&gt; loop (acc * n) (n - <span class="hljs-number">1</span>I)
+    loop <span class="hljs-number">1</span>I n
+
+factorial <span class="hljs-number">100000</span>I</code></pre>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> factorial = <span class="hljs-keyword">function</span>
+    | n <span class="hljs-keyword">when</span> n = <span class="hljs-number">0</span>I -&gt; <span class="hljs-number">1</span>I
+    | n -&gt; seq { <span class="hljs-number">1</span>I..n } |&gt; Seq.fold (<span class="hljs-keyword">fun</span> x product -&gt; x * product) <span class="hljs-number">1</span>I
+
+factorial <span class="hljs-number">100000</span>I</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-11">
+    <section class="slide-content"><h3 id="reading-types">Reading types</h3>
+<ul>
+<li><code>val function : domain -&gt; range</code></li>
+</ul>
+<p>Consider</p>
+<pre><code class="lang-fsharp">&gt; <span class="hljs-keyword">let</span> addAndMakeString x y = (x + y).ToString();;
+<span class="hljs-keyword">val</span> addAndMakeString : x:int -&gt; y:int -&gt; string</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-12">
+    <section class="slide-content"><h3 id="function-currying">Function currying</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> addTwoNumbers x y = x + y   
+<span class="hljs-keyword">let</span> addFive = addTwoNumbers <span class="hljs-number">5.0</span>f
+<span class="hljs-keyword">let</span> sum = addFive <span class="hljs-number">4.0</span>f;;        
+
+<span class="hljs-keyword">val</span> addTwoNumbers : x:float32 -&gt; y:float32 -&gt; float32
+<span class="hljs-keyword">val</span> addFive : (float32 -&gt; float32)
+<span class="hljs-keyword">val</span> sum : float32 = <span class="hljs-number">9.0</span>f</code></pre>
+<p>So, back to <code>addAndMakeString</code></p>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> addAndMakeString x = 
+    <span class="hljs-keyword">let</span> intermediate y = (x + y).ToString()
+    intermediate
+
+<span class="hljs-keyword">val</span> addAndMakeString : x:int -&gt; (int -&gt; string)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-13">
+    <section class="slide-content"><h3 id="applications-of-partial-applications">Applications of partial applications</h3>
+<p><a href="https://fsharpforfunandprofit.com/posts/partial-application/">Credits</a></p>
+<pre><code class="lang-fsharp"><span class="hljs-comment">// create an "adder" by partial application of add</span>
+<span class="hljs-keyword">let</span> add42 = (+) <span class="hljs-number">42</span>    <span class="hljs-comment">// partial application</span>
+add42 <span class="hljs-number">1</span>
+add42 <span class="hljs-number">3</span>
+
+<span class="hljs-comment">// create a new list by applying the add42 function </span>
+<span class="hljs-comment">// to each element</span>
+[<span class="hljs-number">1</span>;<span class="hljs-number">2</span>;<span class="hljs-number">3</span>] |&gt; List.map add42 
+
+<span class="hljs-comment">// create a "tester" by partial application of "less than"</span>
+<span class="hljs-keyword">let</span> twoIsLessThan = (&lt;) <span class="hljs-number">2</span>   <span class="hljs-comment">// partial application</span>
+twoIsLessThan <span class="hljs-number">1</span>
+twoIsLessThan <span class="hljs-number">3</span>
+
+<span class="hljs-comment">// filter each element with the twoIsLessThan function</span>
+[<span class="hljs-number">1</span>;<span class="hljs-number">2</span>;<span class="hljs-number">3</span>] |&gt; List.filter twoIsLessThan 
+
+<span class="hljs-comment">// create a "printer" by partial application of printfn</span>
+<span class="hljs-keyword">let</span> printer = printfn <span class="hljs-string">"printing param=%i"</span> 
+
+<span class="hljs-comment">// loop over each element and call the printer function</span>
+[<span class="hljs-number">1</span>;<span class="hljs-number">2</span>;<span class="hljs-number">3</span>] |&gt; List.iter printer   
+
+printing param=<span class="hljs-number">1</span>
+printing param=<span class="hljs-number">2</span>
+printing param=<span class="hljs-number">3</span>
+
+<span class="hljs-keyword">val</span> add42 : (int -&gt; int)
+<span class="hljs-keyword">val</span> twoIsLessThan : (int -&gt; bool)
+<span class="hljs-keyword">val</span> printer : (int -&gt; unit)
+<span class="hljs-keyword">val</span> it : unit = ()</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-14">
+    <section class="slide-content"><h3 id="piping">Piping</h3>
+<p>Consider the pipe function defined as:</p>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> (|&gt;) x f = f x
+
+<span class="hljs-keyword">let</span> doSomething x y z = x+y+z
+doSomething <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>       <span class="hljs-comment">// all parameters after function</span>
+
+<span class="hljs-keyword">let</span> doSomethingPartial = doSomething <span class="hljs-number">1</span> <span class="hljs-number">2</span>
+doSomethingPartial <span class="hljs-number">3</span>     <span class="hljs-comment">// only one parameter after function now</span>
+<span class="hljs-number">3</span> |&gt; doSomethingPartial  <span class="hljs-comment">// same as above - last parameter piped in</span>
+
+<span class="hljs-string">"12"</span> |&gt; int               <span class="hljs-comment">// parses string "12" to an int</span>
+<span class="hljs-number">1</span> |&gt; (+) <span class="hljs-number">2</span> |&gt; <span class="hljs-comment">(*) 3       // chain of arithmetic</span></code></pre>
+<h3 id="reverse-pipe">Reverse Pipe</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> (&lt;|) f x = f x
+
+printf <span class="hljs-string">"%i"</span> &lt;| <span class="hljs-number">1</span>+<span class="hljs-number">2</span>       <span class="hljs-comment">// using reverse pipe</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-15">
+    <section class="slide-content"><h3 id="together-now">Together now</h3>
+<pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> add x y = x + y
+(<span class="hljs-number">1</span>+<span class="hljs-number">2</span>) add (<span class="hljs-number">3</span>+<span class="hljs-number">4</span>)          <span class="hljs-comment">// error</span>
+<span class="hljs-number">1</span>+<span class="hljs-number">2</span> |&gt; add &lt;| <span class="hljs-number">3</span>+<span class="hljs-number">4</span>        <span class="hljs-comment">// pseudo infix</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-16">
+    <section class="slide-content"><h3 id="sudoku-solver">Sudoku Solver</h3>
+<p><a href="https://github.com/lawliet89/fsudoku/blob/master/fsudoku/Program.fs">Full source code</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-17">
+    <section class="slide-content"><h3 id="next-episode">Next Episode</h3>
+<ul>
+<li>Function composition</li>
+<li>Types</li>
+<li>Sequences, lists, options, tuples</li>
+<li><a href="https://fsharpforfunandprofit.com/posts/monadster/">&quot;Dr Frankenfunctor and the Monadster&quot;</a> -- Functors and Monads</li>
+<li>Using F♯ with tests and build systems</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden author-slide" id="slide-18">
+    <section class="slide-content"><div class="author">
+  <h1 class="name">Yong Wen Chua</h1>
+    <h3 class="twitter">
+      <a href="http://twitter.com/@lawlietsg">@lawlietsg</a>
+    </h3>
+</div>
+</section>
+  </div>
+
+  <div class="controls">
+    <div class="arrow prev"></div>
+    <div class="arrow next"></div>
+  </div>
+
+
+  <script type="text/javascript">
+    /**
+ * Returns the current page number of the presentation.
+ */
+function currentPosition() {
+  return parseInt(document.querySelector('.slide:not(.hidden)').id.slice(6));
+}
+
+
+/**
+ * Navigates forward n pages
+ * If n is negative, we will navigate in reverse
+ */
+function navigate(n) {
+  var position = currentPosition();
+  var numSlides = document.getElementsByClassName('slide').length;
+
+  /* Positions are 1-indexed, so we need to add and subtract 1 */
+  var nextPosition = (position - 1 + n) % numSlides + 1;
+
+  /* Normalize nextPosition in-case of a negative modulo result */
+  nextPosition = (nextPosition - 1 + numSlides) % numSlides + 1;
+
+  document.getElementById('slide-' + position).classList.add('hidden');
+  document.getElementById('slide-' + nextPosition).classList.remove('hidden');
+
+  updateProgress();
+  updateURL();
+  updateTabIndex();
+}
+
+
+/**
+ * Updates the current URL to include a hashtag of the current page number.
+ */
+function updateURL() {
+  try {
+    window.history.replaceState({} , null, '#' + currentPosition());
+  } catch (e) {
+    window.location.hash = currentPosition();
+  }
+}
+
+
+/**
+ * Sets the progress indicator.
+ */
+function updateProgress() {
+  var progressBar = document.querySelector('.progress-bar');
+
+  if (progressBar !== null) {
+    var numSlides = document.getElementsByClassName('slide').length;
+    var position = currentPosition() - 1;
+    var percent = (numSlides === 1) ? 100 : 100 * position / (numSlides - 1);
+    progressBar.style.width = percent.toString() + '%';
+  }
+}
+
+
+/**
+ * Removes tabindex property from all links on the current slide, sets
+ * tabindex = -1 for all links on other slides. Prevents slides from appearing
+ * out of control.
+ */
+function updateTabIndex() {
+  var allLinks = document.querySelectorAll('.slide a');
+  var position = currentPosition();
+  var currentPageLinks = document.getElementById('slide-' + position).querySelectorAll('a');
+  var i;
+
+  for (i = 0; i < allLinks.length; i++) {
+    allLinks[i].setAttribute('tabindex', -1);
+  }
+
+  for (i = 0; i < currentPageLinks.length; i++) {
+    currentPageLinks[i].removeAttribute('tabindex');
+  }
+}
+
+/**
+ * Determines whether or not we are currently in full screen mode
+ */
+function isFullScreen() {
+  return document.fullscreenElement ||
+         document.mozFullScreenElement ||
+         document.webkitFullscreenElement ||
+         document.msFullscreenElement;
+}
+
+/**
+ * Toggle fullScreen mode on document element.
+ * Works on chrome (>= 15), firefox (>= 9), ie (>= 11), opera(>= 12.1), safari (>= 5).
+ */
+function toggleFullScreen() {
+  /* Convenient renames */
+  var docElem = document.documentElement;
+  var doc = document;
+
+  docElem.requestFullscreen =
+      docElem.requestFullscreen ||
+      docElem.msRequestFullscreen ||
+      docElem.mozRequestFullScreen ||
+      docElem.webkitRequestFullscreen.bind(docElem, Element.ALLOW_KEYBOARD_INPUT);
+
+  doc.exitFullscreen =
+      doc.exitFullscreen ||
+      doc.msExitFullscreen ||
+      doc.mozCancelFullScreen ||
+      doc.webkitExitFullscreen;
+
+  isFullScreen() ? doc.exitFullscreen() : docElem.requestFullscreen();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Update the tabindex to prevent weird slide transitioning
+  updateTabIndex();
+
+  // If the location hash specifies a page number, go to it.
+  var page = window.location.hash.slice(1);
+  if (page) {
+    navigate(parseInt(page) - 1);
+  }
+
+  document.onkeydown = function (e) {
+    var kc = e.keyCode;
+
+    // left, down, H, J, backspace, PgUp - BACK
+    // up, right, K, L, space, PgDn - FORWARD
+    // enter - FULLSCREEN
+    if (kc === 37 || kc === 40 || kc === 8 || kc === 72 || kc === 74 || kc === 33) {
+      navigate(-1);
+    } else if (kc === 38 || kc === 39 || kc === 32 || kc === 75 || kc === 76 || kc === 34) {
+      navigate(1);
+    } else if (kc === 13) {
+      toggleFullScreen();
+    }
+  };
+
+  if (document.querySelector('.next') && document.querySelector('.prev')) {
+    document.querySelector('.next').onclick = function (e) {
+      e.preventDefault();
+      navigate(1);
+    };
+
+    document.querySelector('.prev').onclick = function (e) {
+      e.preventDefault();
+      navigate(-1);
+    };
+  }
+});
+
+
+  </script>
+</body>
+</html>

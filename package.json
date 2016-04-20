@@ -1,0 +1,15 @@
+{
+  "name": "fsharp.cleaver",
+  "version": "1.0.0",
+  "description": "NA",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cleaver": "cleaver watch --"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cleaver": "^0.8.2"
+  }
+}

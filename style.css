@@ -1,0 +1,45 @@
+pre {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    overflow: auto;
+    font-size: 90%;
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+code, pre {
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 140%;
+}
+
+.long-code {
+    font-size: 80%;
+}
+
+.slide-content {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+h1, h2 {
+    margin: auto;
+}
+
+iframe {
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 90%;
+    width: 90%;
+    outline: 0;
+}
