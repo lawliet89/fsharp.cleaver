@@ -43,11 +43,12 @@ style: style.css
 ### Hello World
 
 ```fsharp
-> System.Console.WriteLine "Hello world";;
+> printfn "Hello World!";;
 Hello world
 val it : unit = ()
 
 ```
+--
 ### Values
  - Immutable values are bound (not assigned) with `let
 

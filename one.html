@@ -446,10 +446,13 @@ to mutate data</li>
   </div>
   <div class="slide hidden" id="slide-4">
     <section class="slide-content"><h3 id="hello-world">Hello World</h3>
-<pre><code class="lang-fsharp">&gt; System.Console.WriteLine <span class="hljs-string">"Hello world"</span>;;
+<pre><code class="lang-fsharp">&gt; printfn <span class="hljs-string">"Hello World!"</span>;;
 Hello world
 <span class="hljs-keyword">val</span> it : unit = ()</code></pre>
-<h3 id="values">Values</h3>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-5">
+    <section class="slide-content"><h3 id="values">Values</h3>
 <ul>
 <li>Immutable values are bound (not assigned) with `let</li>
 </ul>
@@ -462,7 +465,7 @@ Hello world
 <span class="hljs-keyword">val</span> z : int = <span class="hljs-number">15</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-5">
+  <div class="slide hidden" id="slide-6">
     <section class="slide-content"><h3 id="functions">Functions</h3>
 <ul>
 <li>Are also values</li>
@@ -475,7 +478,7 @@ Hello world
 <span class="hljs-keyword">val</span> sum : int = <span class="hljs-number">11</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-6">
+  <div class="slide hidden" id="slide-7">
     <section class="slide-content"><h3 id="some-more-complicated-calls">Some more complicated calls</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> add x y = x + y
 
@@ -498,7 +501,7 @@ num3: <span class="hljs-number">12</span>
 <span class="hljs-keyword">val</span> it : unit = ()</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-7">
+  <div class="slide hidden" id="slide-8">
     <section class="slide-content"><h3 id="recursion">Recursion</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> fib = <span class="hljs-keyword">function</span>
      | <span class="hljs-number">0</span> -&gt; <span class="hljs-number">0</span>
@@ -512,7 +515,7 @@ fib <span class="hljs-number">10</span>;;
 <pre><code class="lang-fsharp">fib <span class="hljs-number">100</span>;;</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-8">
+  <div class="slide hidden" id="slide-9">
     <section class="slide-content"><h3 id="another-example">Another example</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> factorial = <span class="hljs-keyword">function</span>
     | n <span class="hljs-keyword">when</span> n = <span class="hljs-number">0</span>I -&gt; <span class="hljs-number">1</span>I
@@ -522,7 +525,7 @@ factorial <span class="hljs-number">100</span>I
 factorial <span class="hljs-number">100000</span>I</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-9">
+  <div class="slide hidden" id="slide-10">
     <section class="slide-content"><h3 id="tail-recursion">Tail Recursion</h3>
 <pre><code class="lang-fsharp"><span class="hljs-comment">// Tail recursive Fibonacci</span>
 <span class="hljs-comment">// BigInt -&gt; BigInt</span>
@@ -539,7 +542,7 @@ factorial <span class="hljs-number">100000</span>I</code></pre>
 [<span class="hljs-number">0</span>I .. <span class="hljs-number">100</span>I .. <span class="hljs-number">10000</span>I] |&gt; List.iter (<span class="hljs-keyword">fun</span> x -&gt; printfn <span class="hljs-string">"fib(%O) = %O"</span> x (bigFib x))</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-10">
+  <div class="slide hidden" id="slide-11">
     <section class="slide-content"><h3 id="another-one">Another one</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> factorial n = 
     <span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> loop acc = <span class="hljs-keyword">function</span>
@@ -555,7 +558,7 @@ factorial <span class="hljs-number">100000</span>I</code></pre>
 factorial <span class="hljs-number">100000</span>I</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-11">
+  <div class="slide hidden" id="slide-12">
     <section class="slide-content"><h3 id="reading-types">Reading types</h3>
 <ul>
 <li><code>val function : domain -&gt; range</code></li>
@@ -565,7 +568,7 @@ factorial <span class="hljs-number">100000</span>I</code></pre>
 <span class="hljs-keyword">val</span> addAndMakeString : x:int -&gt; y:int -&gt; string</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-12">
+  <div class="slide hidden" id="slide-13">
     <section class="slide-content"><h3 id="function-currying">Function currying</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> addTwoNumbers x y = x + y   
 <span class="hljs-keyword">let</span> addFive = addTwoNumbers <span class="hljs-number">5.0</span>f
@@ -582,7 +585,7 @@ factorial <span class="hljs-number">100000</span>I</code></pre>
 <span class="hljs-keyword">val</span> addAndMakeString : x:int -&gt; (int -&gt; string)</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-13">
+  <div class="slide hidden" id="slide-14">
     <section class="slide-content"><h3 id="applications-of-partial-applications">Applications of partial applications</h3>
 <p><a href="https://fsharpforfunandprofit.com/posts/partial-application/">Credits</a></p>
 <pre><code class="lang-fsharp"><span class="hljs-comment">// create an "adder" by partial application of add</span>
@@ -618,7 +621,7 @@ printing param=<span class="hljs-number">3</span>
 <span class="hljs-keyword">val</span> it : unit = ()</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-14">
+  <div class="slide hidden" id="slide-15">
     <section class="slide-content"><h3 id="piping">Piping</h3>
 <p>Consider the pipe function defined as:</p>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> (|&gt;) x f = f x
@@ -638,14 +641,14 @@ doSomethingPartial <span class="hljs-number">3</span>     <span class="hljs-comm
 printf <span class="hljs-string">"%i"</span> &lt;| <span class="hljs-number">1</span>+<span class="hljs-number">2</span>       <span class="hljs-comment">// using reverse pipe</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-15">
+  <div class="slide hidden" id="slide-16">
     <section class="slide-content"><h3 id="together-now">Together now</h3>
 <pre><code class="lang-fsharp"><span class="hljs-keyword">let</span> add x y = x + y
 (<span class="hljs-number">1</span>+<span class="hljs-number">2</span>) add (<span class="hljs-number">3</span>+<span class="hljs-number">4</span>)          <span class="hljs-comment">// error</span>
 <span class="hljs-number">1</span>+<span class="hljs-number">2</span> |&gt; add &lt;| <span class="hljs-number">3</span>+<span class="hljs-number">4</span>        <span class="hljs-comment">// pseudo infix</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-16">
+  <div class="slide hidden" id="slide-17">
     <section class="slide-content"><h3 id="sudoku-solver">Sudoku Solver</h3>
 <p><a href="https://github.com/lawliet89/fsudoku/blob/master/fsudoku/Program.fs">Full source code</a></p>
 <pre><code>$./fsudoku.exe fsudoku/difficult.txt 
@@ -671,7 +674,7 @@ Proposed Solution:
 Validity: True</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-17">
+  <div class="slide hidden" id="slide-18">
     <section class="slide-content"><h3 id="sudoku-solver-boilerplate">Sudoku Solver - Boilerplate</h3>
 <pre><code class="lang-fsharp">    <span class="hljs-comment">// Types</span>
     <span class="hljs-class"><span class="hljs-keyword">type</span> <span class="hljs-title">Value</span> </span>= Option&lt;int&gt;
@@ -704,7 +707,7 @@ Validity: True</code></pre>
             |&gt; String.concat <span class="hljs-string">"\n"</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-18">
+  <div class="slide hidden" id="slide-19">
     <section class="slide-content"><h3 id="sudoku-solver-helpers">Sudoku Solver - Helpers</h3>
 <pre><code class="lang-fsharp">    <span class="hljs-keyword">let</span> <span class="hljs-keyword">public</span> ValidList (list : Value list) = 
         <span class="hljs-keyword">let</span> <span class="hljs-keyword">rec</span> withinRange = <span class="hljs-keyword">function</span>
@@ -741,7 +744,7 @@ Validity: True</code></pre>
         valid &amp;&amp; (not anyNone)</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-19">
+  <div class="slide hidden" id="slide-20">
     <section class="slide-content"><h3 id="sudoku-solver-backtracing-algorithm">Sudoku Solver Backtracing Algorithm</h3>
 <p><img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Sudoku_solved_by_bactracking.gif" alt="Illustration"></p>
 <pre><code> Initialize 2D array with 81 empty grids (nx = 9, ny = 9)
@@ -769,7 +772,7 @@ Validity: True</code></pre>
  }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-20">
+  <div class="slide hidden" id="slide-21">
     <section class="slide-content"><h3 id="sudoku-solver-solving-logic">Sudoku Solver -- Solving Logic</h3>
 <pre><code class="lang-fsharp">    <span class="hljs-keyword">let</span> solve (grid : Grid) =
         <span class="hljs-keyword">let</span> solution : Grid = Array2D.copy grid
@@ -803,7 +806,7 @@ Validity: True</code></pre>
         solution</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-21">
+  <div class="slide hidden" id="slide-22">
     <section class="slide-content"><h3 id="next-episode">Next Episode</h3>
 <ul>
 <li>Function composition</li>
@@ -814,7 +817,7 @@ Validity: True</code></pre>
 </ul>
 </section>
   </div>
-  <div class="slide hidden author-slide" id="slide-22">
+  <div class="slide hidden author-slide" id="slide-23">
     <section class="slide-content"><div class="author">
   <h1 class="name">Yong Wen Chua</h1>
     <h3 class="twitter">
